@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 292 82" role="img" aria-labelledby="title desc">
+  <title id="title">LSOFT Servicios Informáticos</title>
+  <desc id="desc">Logo moderno de LSOFT con isotipo tecnológico y palabra LSOFT.</desc>
+  <defs>
+    <linearGradient id="markGradient" x1="8" y1="64" x2="58" y2="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00b7d8"/>
+      <stop offset="1" stop-color="#0b65c2"/>
+    </linearGradient>
+    <linearGradient id="wordGradient" x1="82" y1="16" x2="270" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0b65c2"/>
+      <stop offset="1" stop-color="#169bd5"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 12h24v10H22v28h28V36h10v24H12V12Z" stroke="url(#markGradient)" stroke-width="5"/>
+    <path d="M34 22h26v26H44V38h6v-6H34V22Z" stroke="#12c7dd" stroke-width="5"/>
+    <path d="M22 50h-8m46-14h8M34 22V12" stroke="#0b65c2" stroke-width="4"/>
+    <circle cx="14" cy="50" r="3.5" fill="#00b7d8" stroke="none"/>
+    <circle cx="68" cy="36" r="3.5" fill="#169bd5" stroke="none"/>
+    <circle cx="34" cy="12" r="3.5" fill="#0b65c2" stroke="none"/>
+  </g>
+  <text x="84" y="46" fill="url(#wordGradient)" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="42" font-weight="800" letter-spacing="-1">LSOFT</text>
+  <text x="86" y="66" fill="#40566f" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="13" font-weight="700" letter-spacing=".9">Servicios Informáticos</text>
+</svg>
