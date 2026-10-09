@@ -161,7 +161,50 @@ En la esquina inferior derecha de la pantalla se ubica un componente flotante ti
 
 ## 6. URLs de Acceso
 
-- **Original (Clon Referencial):** [`http://localhost:5174/`](http://localhost:5174/) o [`http://localhost:5174/?v=original`](http://localhost:5174/?v=original)
-- **Variante 1 (IA & Hardware Inteligente):** [`http://localhost:5174/?v=ai-smart`](http://localhost:5174/?v=ai-smart)
-- **Variante 2 (Minimalismo Psicológico & Retorno Operativo):** [`http://localhost:5174/?v=minimal-roi`](http://localhost:5174/?v=minimal-roi)
-- **Variante 3 (Sistemas, Integración & Alta Carga):** [`http://localhost:5174/?v=deep-tech`](http://localhost:5174/?v=deep-tech)
+- **Original (Clon Referencial):** [`http://localhost:5173/`](http://localhost:5173/) o [`http://localhost:5173/?v=original`](http://localhost:5173/?v=original)
+- **Variante 1 (IA & Hardware Inteligente):** [`http://localhost:5173/?v=ai-smart`](http://localhost:5173/?v=ai-smart)
+- **Variante 2 (Minimalismo Psicológico & Retorno Operativo):** [`http://localhost:5173/?v=minimal-roi`](http://localhost:5173/?v=minimal-roi)
+- **Variante 3 (Sistemas, Integración & Alta Carga):** [`http://localhost:5173/?v=deep-tech`](http://localhost:5173/?v=deep-tech)
+
+---
+
+## 7. Rediseño Inmersivo de Hero Sections (Motion & Estética Nivel Apple)
+
+Conforme al requerimiento de erradicar bloques sobrecargados de texto estático y sustituirlos por experiencias visuales de impacto inmediato:
+
+1. **Variante 1 (IA & Hardware):**
+   - **Visual Central:** Red neuronal SVG dinámica con anillos orbitales en rotación y contragiro (`neuralSpin`, `neuralSpinRev`), sinapsis con flujo de pulsos (`linkFlow`), núcleo brillante con aura radial y partículas ascendentes.
+   - **Indicadores Flotantes:** Chips de telemetría en tiempo real (*"Agente IA Conectado"*, *"ERP Sincronizado"*, *"Dispositivos en Terreno"*) con micro-pulsos LED.
+   - **Composición:** Grilla geométrica dividida 50/50: tipografía Apple de alto impacto + métricas en glassmorphism (-70% carga operativa, 24/7 autónomo, 0 fricción).
+
+2. **Variante 2 (Minimalismo Psicológico & ROI):**
+   - **Visual Central:** Motor geométrico de tiempo recuperado (*Time Engine*), con arcos rotatorios esmeralda (`#059669`), anillos concéntricos con respiración dimensional (`timeBreathe`) y agujas cronométricas estilizadas.
+   - **Indicadores Flotantes:** Píldoras de valor (*"84 hrs/mes recuperadas por colaborador"*, *"3.8x ROI sobre costo operativo"*, *"0 resistencia al cambio"*).
+   - **Contador en Vivo:** Contador animado de +14.850 horas operativas recuperadas para clientes.
+
+3. **Variante 3 (Sistemas & Continuidad Operativa):**
+   - **Visual Central:** Blueprint hexagonal cibernético con rotación orbital, líneas de flujo de datos animadas (`dataFlowAnim`) y nodos de capas señalizados (*NUBE*, *ERP*, *IoT*, *DATOS*, *IA*, *API*).
+   - **Monitoreo & Telemetría:** Strip de 4 tarjetas de telemetría con SLA activo (`99.98% SLA`), ticker en vivo y botón con comando directo a terminal `$ lsoft --telemetria`.
+   - **Fondo Cyber:** Malla reticular en perspectiva sutil de 40px con viñeta radial.
+
+---
+
+## 8. Scrollytelling Inmersivo Pinned / Sticky (Estilo Apple / Stripe — Sin Sliders Manuales)
+
+Conforme a la solicitud de eliminar por completo barras deslizables manuales (`<input type="range">`) y lograr una experiencia verdaderamente inmersiva con el scroll del ratón:
+
+- **Mecánica Pinned (`useScrollStory.js` con `isPinnedTrack: true`):**
+  - La sección del Hero está montada dentro de un contenedor track de `230vh` con un escenario interno de `height: 100vh; position: sticky; top: 0;`.
+  - **Fase 1 (0% a ~75% de recorrido):** La pantalla permanece fija (la página no baja). Al deslizar la rueda del ratón, se activa la animación de transformación interactiva.
+  - **Fase 2 (75% a 100% de recorrido):** Se mantiene el estado sincronizado/resuelto para que el usuario pueda apreciar el resultado final.
+  - **Fase 3 (> 100%):** Al finalizar la animación, el escenario se desancla de manera fluida y la página continúa su scroll natural hacia las secciones inferiores.
+
+- **Implementación por Variante:**
+  1. **Variante 1 (`?v=ai-smart` — Convergencia de Caos a Orden):**
+     - 6 nodos dispersos y caóticos (Chatbot, ERP, Bodega, POS, Facturación, Alertas) convergen radialmente hacia un escudo hexagonal blindado y ordenado.
+     - Píldora de estado (`.convergence-status-pill`) con micro-barra y feedback dinámico (*"⇣ Scrollee para conectar..."* $\rightarrow$ *"✔ Estructura Sincronizada"*).
+  2. **Variante 2 (`?v=minimal-roi` — Elevación de Retorno & Rescate de Horas):**
+     - Trayectoria ascendente de ROI (+1.0x hasta +3.8x) mientras las partículas de horas fugadas son reabsorbidas por el vórtice central de valor.
+     - En `#ventaja`, el componente `BottleneckConduit` dilata automáticamente su estrangulamiento de 40px a 170px al hacer scroll sin necesidad de slider.
+  3. **Variante 3 (`?v=deep-tech` — Desglose Isométrico de Arquitectura en 3D):**
+     - El bloque monolítico inicial explota verticalmente en 4 capas isométricas en perspectiva (`Interface`, `API Gateway & IA`, `Integración ERP & Concurrencia`, `Hardware & Base de Datos`), conectadas por líneas de elevadores de datos luminosos.

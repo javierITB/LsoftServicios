@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Clock,
   ShieldCheck,
@@ -11,8 +11,12 @@ import {
   Award,
   Layers,
   LineChart,
+  RotateCcw,
+  Zap,
 } from 'lucide-react';
+import { useScrollStory } from '../../../hooks/useScrollStory';
 import RoiCalculator from './RoiCalculator';
+import BottleneckConduit from './BottleneckConduit';
 
 export default function MinimalRoiView() {
   const [formData, setFormData] = useState({
@@ -21,24 +25,40 @@ export default function MinimalRoiView() {
     bottleneck: '',
   });
   const [submitted, setSubmitted] = useState(false);
-  const [heroCounter, setHeroCounter] = useState(0);
 
-  // Animated counter for the hero
-  useEffect(() => {
-    const target = 2340;
-    const duration = 2500;
-    const step = target / (duration / 16);
-    let current = 0;
-    const timer = setInterval(() => {
-      current += step;
-      if (current >= target) {
-        current = target;
-        clearInterval(timer);
-      }
-      setHeroCounter(Math.floor(current));
-    }, 16);
-    return () => clearInterval(timer);
-  }, []);
+  // Pinned Scrollytelling & 3D Interactive Time-to-ROI Engine
+  const heroTrackRef = useRef(null);
+  const { scrollProgress, mousePos, mouseHandlers } = useScrollStory(heroTrackRef, { isPinnedTrack: true });
+
+  // Effective progress: 0 = Fuga de tiempo severa, 1 = Retorno consolidado (+3.8x)
+  // First 75% runs transformation, remaining 25% holds before unpinning
+  const effectiveHeroProgress = Math.min(1, Math.max(0, scrollProgress / 0.75));
+  const isElevated = effectiveHeroProgress >= 0.65;
+
+  // Dynamic values responding to scroll
+  const dynamicHours = Math.round(effectiveHeroProgress * 14850);
+  const dynamicGainCLP = Math.round(effectiveHeroProgress * 44550000);
+  const dynamicROI = (1.0 + effectiveHeroProgress * 2.8).toFixed(1);
+
+  // Leaking operational nodes that converge into the center vortex
+  const leakNodes = [
+    { id: 1, labelLoss: '-24h Planillas', labelGain: '+Planillas Auto', angle: 35, chaosDist: 235, orderDist: 70, color: '#f59e0b' },
+    { id: 2, labelLoss: '-18h Cuadraturas', labelGain: '+Cuadraturas ERP', angle: 95, chaosDist: 250, orderDist: 85, color: '#ef4444' },
+    { id: 3, labelLoss: '-28h Correos', labelGain: '+Respuestas 24/7', angle: 165, chaosDist: 230, orderDist: 65, color: '#f59e0b' },
+    { id: 4, labelLoss: '-14h Reprocesos', labelGain: '+Cero Fricción', angle: 230, chaosDist: 245, orderDist: 75, color: '#ef4444' },
+    { id: 5, labelLoss: '-16h Esperas ERP', labelGain: '+Conexión Nativa', angle: 290, chaosDist: 255, orderDist: 70, color: '#f59e0b' },
+    { id: 6, labelLoss: '-12h Archivos', labelGain: '+Datos Seguros', angle: 350, chaosDist: 220, orderDist: 85, color: '#10b981' },
+  ];
+
+  const interpolatedLeakNodes = leakNodes.map((n) => {
+    const currentDist = n.chaosDist - (n.chaosDist - n.orderDist) * effectiveHeroProgress;
+    const rad = (n.angle * Math.PI) / 180;
+    return {
+      ...n,
+      x: 300 + Math.cos(rad) * currentDist,
+      y: 300 + Math.sin(rad) * currentDist,
+    };
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -79,101 +99,296 @@ export default function MinimalRoiView() {
       </header>
 
       {/* ═══════════════════════════════════════════════════════════════
-          IMMERSIVE HERO — Animated Time Recovery Visualization
+          IMMERSIVE PINNED HERO — Chrono-Recovery & ROI Elevation Engine
          ═══════════════════════════════════════════════════════════════ */}
-      <section className="minimal-hero" id="inicio">
-        {/* Subtle background animation */}
-        <div className="minimal-hero-bg">
-          {/* Concentric circles representing time */}
-          <svg className="time-visual-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#059669" stopOpacity="0.15" />
-                <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
-              </linearGradient>
-              <linearGradient id="emeraldStroke" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#059669" stopOpacity="0.6" />
-                <stop offset="100%" stopColor="#34d399" stopOpacity="0.2" />
-              </linearGradient>
-            </defs>
+      <div className="minimal-hero-scroll-track" ref={heroTrackRef}>
+        <section className="minimal-hero-sticky-stage" id="inicio">
+        <div className="minimal-hero-ambient"></div>
+        <div className="minimal-hero-container">
+          <div className="minimal-hero-split">
+            {/* Left Column: Hero copy & CTAs */}
+            <div className="minimal-hero-content">
+              <div className="hero-counter-display">
+                <span className="counter-pulse-dot"></span>
+                <span className="counter-number">
+                  +{dynamicHours > 0 ? dynamicHours.toLocaleString('es-CL') : '14.850'}
+                </span>
+                <span className="counter-label">horas recuperadas para empresas este año</span>
+              </div>
 
-            {/* Breathing concentric circles */}
-            <circle className="time-ring tr-1" cx="300" cy="300" r="260" />
-            <circle className="time-ring tr-2" cx="300" cy="300" r="210" />
-            <circle className="time-ring tr-3" cx="300" cy="300" r="160" />
-            <circle className="time-ring tr-4" cx="300" cy="300" r="110" />
+              <h1 className="minimal-hero-headline">
+                No Gaste en software.
+                <br />
+                <span className="text-gain">Invierta en su tiempo.</span>
+              </h1>
 
-            {/* Rotating arc segments */}
-            <path className="time-arc arc-1" d="M 300 40 A 260 260 0 0 1 560 300" />
-            <path className="time-arc arc-2" d="M 300 560 A 260 260 0 0 1 40 300" />
-            <path className="time-arc arc-3" d="M 300 90 A 210 210 0 0 1 510 300" />
+              <p className="minimal-hero-subcopy">
+                Transformamos los cuellos de botella de su empresa en ventajas competitivas cuantificables.
+                Menor carga operativa, mayor capacidad de escala con la misma dotación.
+              </p>
 
-            {/* Clock hands abstracted */}
-            <line className="clock-hand hand-hour" x1="300" y1="300" x2="300" y2="170" />
-            <line className="clock-hand hand-minute" x1="300" y1="300" x2="300" y2="130" />
+              <div className="minimal-hero-ctas">
+                <a href="#calculadora" className="btn-gain-primary">
+                  <TrendingUp size={18} />
+                  <span>Calcular Retorno Operativo</span>
+                </a>
+                <a href="#metodologia" className="btn-gain-outline">
+                  <span>Nuestra Metodología</span>
+                </a>
+              </div>
 
-            {/* Center pulse */}
-            <circle className="time-center-pulse" cx="300" cy="300" r="50" fill="url(#emeraldGrad)" />
-            <circle className="time-center-dot" cx="300" cy="300" r="8" />
+              {/* Trust indicators — floating glass chips */}
+              <div className="trust-chips">
+                <div className="trust-chip">
+                  <Award size={16} />
+                  <span>18+ años en Chile</span>
+                </div>
+                <div className="trust-chip">
+                  <HeartHandshake size={16} />
+                  <span>Llave en mano</span>
+                </div>
+                <div className="trust-chip">
+                  <ShieldCheck size={16} />
+                  <span>Continuidad asegurada</span>
+                </div>
+              </div>
+            </div>
 
-            {/* Floating time particles rising upward */}
-            <circle className="time-particle tp-1" cx="280" cy="300" r="3" />
-            <circle className="time-particle tp-2" cx="320" cy="300" r="2.5" />
-            <circle className="time-particle tp-3" cx="260" cy="310" r="2" />
-            <circle className="time-particle tp-4" cx="340" cy="290" r="2.5" />
-            <circle className="time-particle tp-5" cx="300" cy="280" r="3" />
-          </svg>
-        </div>
+            {/* Right Column: Time Visual Engine + Interactive Scrubber */}
+            <div
+              className="minimal-hero-visual"
+              {...mouseHandlers}
+              style={{
+                transform: `perspective(900px) rotateX(${mousePos.y * -7}deg) rotateY(${mousePos.x * 9}deg)`,
+              }}
+            >
+              {/* ROI Ambient Status Pill (Scroll Driven) */}
+              <div className="roi-status-pill">
+                <div className="roi-status-head">
+                  <span className={`roi-status-led ${isElevated ? 'green' : 'amber'}`}></span>
+                  <span className="roi-status-title">
+                    {isElevated
+                      ? `RETORNO CONSOLIDADO: +${dynamicROI}x ROI OPERATIVO`
+                      : 'ESTADO INICIAL: FUGA DE HORAS DETECTADA (-84h/mes)'}
+                  </span>
+                </div>
+                <div className="roi-progress-indicator">
+                  <div className="roi-progress-bar">
+                    <div
+                      className="roi-progress-fill"
+                      style={{ width: `${Math.min(100, effectiveHeroProgress * 100)}%` }}
+                    ></div>
+                  </div>
+                  <span className="roi-assist-hint">
+                    {effectiveHeroProgress < 0.95 ? '⇣ Scrollee para ver la recuperación' : '✔ Retorno Maximizado'}
+                  </span>
+                </div>
+              </div>
 
-        {/* Hero content — Apple-clean */}
-        <div className="minimal-hero-content">
-          <div className="hero-counter-display">
-            <span className="counter-number">+{heroCounter.toLocaleString('es-CL')}</span>
-            <span className="counter-label">horas recuperadas por nuestros clientes este año</span>
-          </div>
+              {/* Floating milestone pills around the time engine */}
+              <div
+                className="floating-roi-pill pill-top"
+                style={{
+                  borderColor: isElevated ? '#059669' : '#cbd5e1',
+                  boxShadow: isElevated ? '0 10px 25px rgba(5,150,105,0.2)' : 'none',
+                }}
+              >
+                <Clock size={14} className="pill-icon" />
+                <span>
+                  <strong>{isElevated ? '+84 hrs/mes' : '84 hrs en riesgo'}</strong> {isElevated ? 'liberadas por colaborador' : 'en tareas manuales'}
+                </span>
+              </div>
 
-          <h1 className="minimal-hero-headline">
-            No adquiere software.
-            <br />
-            <span className="text-gain">Gana tiempo.</span>
-          </h1>
+              <div
+                className="floating-roi-pill pill-bottom"
+                style={{
+                  borderColor: isElevated ? '#059669' : '#cbd5e1',
+                  boxShadow: isElevated ? '0 10px 25px rgba(5,150,105,0.2)' : 'none',
+                }}
+              >
+                <TrendingUp size={14} className="pill-icon" />
+                <span>
+                  <strong>+{dynamicROI}x ROI</strong> sobre costo operativo
+                </span>
+              </div>
 
-          <p className="minimal-hero-subcopy">
-            Transformamos los cuellos de botella de su empresa en ventajas competitivas.
-          </p>
+              <div className="floating-roi-pill pill-side">
+                <Sparkles size={14} className="pill-icon" />
+                <span><strong>0 resistencia</strong> de adopción en equipo</span>
+              </div>
 
-          <div className="minimal-hero-ctas">
-            <a href="#calculadora" className="btn-gain-primary">
-              <TrendingUp size={18} />
-              <span>Calcular Retorno Operativo</span>
-            </a>
-            <a href="#metodologia" className="btn-gain-outline">
-              <span>Nuestra Metodología</span>
-            </a>
-          </div>
-        </div>
+              {/* Chrono-Recovery SVG Canvas */}
+              <svg className="time-visual-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#059669" stopOpacity="0.25" />
+                    <stop offset="100%" stopColor="#10b981" stopOpacity="0.06" />
+                  </linearGradient>
 
-        {/* Trust indicators — floating glass chips */}
-        <div className="trust-chips">
-          <div className="trust-chip">
-            <Award size={16} />
-            <span>18+ años en Chile</span>
-          </div>
-          <div className="trust-chip">
-            <HeartHandshake size={16} />
-            <span>Llave en mano</span>
-          </div>
-          <div className="trust-chip">
-            <ShieldCheck size={16} />
-            <span>Continuidad asegurada</span>
+                  <linearGradient id="emeraldStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#059669" stopOpacity="0.85" />
+                    <stop offset="100%" stopColor="#34d399" stopOpacity="0.35" />
+                  </linearGradient>
+
+                  <linearGradient id="roiCurveGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.6" />
+                    <stop offset="50%" stopColor="#10b981" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#059669" stopOpacity="1" />
+                  </linearGradient>
+
+                  <radialGradient id="vortexGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor={isElevated ? '#10b981' : '#f59e0b'} stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
+                  </radialGradient>
+
+                  <filter id="emeraldGlow">
+                    <feGaussianBlur stdDeviation="3.5" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                </defs>
+
+                {/* Background Grid & Axis */}
+                <line x1="80" y1="520" x2="540" y2="520" stroke="rgba(203,213,225,0.6)" strokeWidth="1.5" />
+                <line x1="80" y1="520" x2="80" y2="100" stroke="rgba(203,213,225,0.6)" strokeWidth="1.5" />
+
+                {/* Concentric Geometric Rings */}
+                <circle className="time-ring tr-1" cx="300" cy="300" r="255" />
+                <circle className="time-ring tr-2" cx="300" cy="300" r="205" />
+                <circle className="time-ring tr-3" cx="300" cy="300" r="155" />
+                <circle className="time-ring tr-4" cx="300" cy="300" r="105" />
+
+                {/* Rotating Arc Segments */}
+                <path className="time-arc arc-1" d="M 300 45 A 255 255 0 0 1 555 300" />
+                <path className="time-arc arc-2" d="M 300 555 A 255 255 0 0 1 45 300" />
+
+                {/* Inward Gravity Magnetic Conduits (connecting leak nodes to vortex) */}
+                {interpolatedLeakNodes.map((n) => (
+                  <line
+                    key={`beam-${n.id}`}
+                    x1="300"
+                    y1="300"
+                    x2={n.x}
+                    y2={n.y}
+                    stroke={isElevated ? '#10b981' : '#f59e0b'}
+                    strokeWidth={1 + effectiveHeroProgress * 1.5}
+                    strokeOpacity={0.25 + effectiveHeroProgress * 0.45}
+                    strokeDasharray="4 6"
+                  />
+                ))}
+
+                {/* Ascending ROI Laser Curve (Drawn dynamically based on progress) */}
+                <path
+                  d="M 90,510 Q 240,490 350,330 T 520,130"
+                  fill="none"
+                  stroke="url(#roiCurveGrad)"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeDasharray="600"
+                  strokeDashoffset={600 - effectiveHeroProgress * 600}
+                  filter="url(#emeraldGlow)"
+                />
+
+                {/* ROI Growth Milestone Points */}
+                {effectiveHeroProgress > 0.25 && (
+                  <g className="milestone-pt-1">
+                    <circle cx="270" cy="420" r="5" fill="#f59e0b" />
+                    <text x="270" y="445" fill="#d97706" fontSize="9.5" fontWeight="700" textAnchor="middle">
+                      +1.4x Base
+                    </text>
+                  </g>
+                )}
+
+                {effectiveHeroProgress > 0.6 && (
+                  <g className="milestone-pt-2">
+                    <circle cx="390" cy="270" r="6" fill="#10b981" filter="url(#emeraldGlow)" />
+                    <text x="390" y="252" fill="#047857" fontSize="10" fontWeight="800" textAnchor="middle">
+                      +2.5x Auto
+                    </text>
+                  </g>
+                )}
+
+                {effectiveHeroProgress > 0.9 && (
+                  <g className="milestone-pt-3">
+                    <circle cx="520" cy="130" r="9" fill="#059669" filter="url(#emeraldGlow)" />
+                    <circle cx="520" cy="130" r="4" fill="#ffffff" />
+                    <text x="520" y="108" fill="#047857" fontSize="12" fontWeight="900" textAnchor="middle">
+                      +3.8x ROI
+                    </text>
+                  </g>
+                )}
+
+                {/* Clock Hands with Growth Vector Orientation */}
+                <line
+                  className="clock-hand"
+                  x1="300"
+                  y1="300"
+                  x2={300 + Math.cos((-90 + effectiveHeroProgress * 135) * Math.PI / 180) * 110}
+                  y2={300 + Math.sin((-90 + effectiveHeroProgress * 135) * Math.PI / 180) * 110}
+                  stroke="#059669"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+                <line
+                  className="clock-hand"
+                  x1="300"
+                  y1="300"
+                  x2={300 + Math.cos((-90 + effectiveHeroProgress * 225) * Math.PI / 180) * 140}
+                  y2={300 + Math.sin((-90 + effectiveHeroProgress * 225) * Math.PI / 180) * 140}
+                  stroke="#10b981"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+
+                {/* Central Time Core Vortex */}
+                <circle cx="300" cy="300" r="75" fill="url(#vortexGlow)" />
+                <circle cx="300" cy="300" r="50" fill="url(#emeraldGrad)" stroke="#059669" strokeWidth="2" />
+                <circle cx="300" cy="300" r="8" fill="#059669" filter="url(#emeraldGlow)" />
+
+                {/* Central Core Label */}
+                <text x="300" y="295" fill="#047857" fontSize="10" fontWeight="800" textAnchor="middle">
+                  {isElevated ? 'LSOFT' : 'RESERVORIO'}
+                </text>
+                <text x="300" y="312" fill="#065f46" fontSize="9" fontWeight="700" textAnchor="middle">
+                  {isElevated ? 'TIEMPO' : 'DE HORAS'}
+                </text>
+
+                {/* Leaking Nodes / Converged Nodes */}
+                {interpolatedLeakNodes.map((n) => (
+                  <g key={n.id} className="leak-node-group">
+                    <circle
+                      cx={n.x}
+                      cy={n.y}
+                      r={isElevated ? 6 : 5}
+                      fill={isElevated ? '#059669' : n.color}
+                      stroke="#ffffff"
+                      strokeWidth="1.5"
+                    />
+                    <text
+                      x={n.x}
+                      y={n.y - 10}
+                      fill={isElevated ? '#047857' : '#9a3412'}
+                      fontSize="9"
+                      fontWeight="700"
+                      textAnchor="middle"
+                    >
+                      {isElevated ? n.labelGain : n.labelLoss}
+                    </text>
+                  </g>
+                ))}
+              </svg>
+            </div>
           </div>
         </div>
 
         {/* Scroll indicator */}
         <div className="scroll-indicator-minimal">
+          <span className="scroll-text-m">
+            {effectiveHeroProgress < 0.95 ? 'Baje con el scroll para ver la recuperación de horas' : 'Calcule su retorno operativo'}
+          </span>
           <div className="scroll-line-m"></div>
         </div>
       </section>
+    </div>
 
       {/* Calculator Section */}
       <section className="minimal-calc-section" id="calculadora">
@@ -189,6 +404,29 @@ export default function MinimalRoiView() {
             <span className="kicker-tag">Nuestra Metodología Integral</span>
             <h2>Cómo convertimos la ineficiencia operativa en rentabilidad medible</h2>
             <p>Un enfoque metódico y estructurado que respeta la realidad de su empresa y asegura resultados desde el primer mes.</p>
+          </div>
+
+          {/* Sequential Stage Process Pipeline */}
+          <div className="methodology-pipeline-track">
+            <div className="pipeline-step-pill active">
+              <span className="p-num">01</span>
+              <span className="p-txt">Análisis</span>
+            </div>
+            <div className="pipeline-connector-line"></div>
+            <div className="pipeline-step-pill active">
+              <span className="p-num">02</span>
+              <span className="p-txt">Propuesta</span>
+            </div>
+            <div className="pipeline-connector-line"></div>
+            <div className="pipeline-step-pill active">
+              <span className="p-num">03</span>
+              <span className="p-txt">Automatización</span>
+            </div>
+            <div className="pipeline-connector-line"></div>
+            <div className="pipeline-step-pill active">
+              <span className="p-num">04</span>
+              <span className="p-txt">Escalabilidad</span>
+            </div>
           </div>
 
           <div className="pillars-grid">
@@ -235,6 +473,9 @@ export default function MinimalRoiView() {
             <h2>Transformar su cuello de botella en su mayor ventaja competitiva</h2>
             <p>El punto más lento de su operación determina el ritmo de toda la empresa. Al resolverlo, el impacto positivo se multiplica en toda la cadena de valor.</p>
           </div>
+
+          {/* Dynamic Bottleneck Dilatation Conduit */}
+          <BottleneckConduit />
 
           <div className="contrast-columns-grid">
             {/* Limitación Operativa Column */}

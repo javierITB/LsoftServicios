@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   Sparkles,
   Bot,
@@ -11,7 +11,12 @@ import {
   Send,
   MessageSquare,
   Radio,
+  Sliders,
+  AlertTriangle,
+  RotateCcw,
+  CheckCircle2,
 } from 'lucide-react';
+import { useScrollStory } from '../../../hooks/useScrollStory';
 import AiChatDemo from './AiChatDemo';
 import AutomationFlowDemo from './AutomationFlowDemo';
 import HardwareDemo from './HardwareDemo';
@@ -23,6 +28,75 @@ export default function AiSmartView() {
   const [contactCompany, setContactCompany] = useState('');
   const [contactArea, setContactArea] = useState('Todas');
   const [isSent, setIsSent] = useState(false);
+
+  // Pinned Scrollytelling & 3D Interactive Convergence
+  const heroTrackRef = useRef(null);
+  const { scrollProgress, mousePos, mouseHandlers } = useScrollStory(heroTrackRef, { isPinnedTrack: true });
+  const [activeNodeHover, setActiveNodeHover] = useState(null);
+
+  // Progress: 0 = Caos de Silos Manuales, 1 = Sincronización Total LSOFT
+  // The first 75% of the scroll track runs the convergence animation.
+  // The remaining 25% holds the synchronized state before smoothly unpinning the page.
+  const effectiveProgress = Math.min(1, Math.max(0, scrollProgress / 0.75));
+  const isSynchronized = effectiveProgress >= 0.65;
+
+  // 6 Operational Nodes with Chaos vs Order coordinates and descriptions
+  const nodes = [
+    {
+      id: 0,
+      chaos: { x: 530, y: 160 },
+      order: { x: 475, y: 300 },
+      chaosTitle: 'Planillas Manuales',
+      orderTitle: 'Automatización 24/7',
+      desc: isSynchronized ? 'Flujos procesados en 1.2 segundos sin tocar Excel' : 'Carga duplicada y lentitud de respuesta',
+    },
+    {
+      id: 1,
+      chaos: { x: 470, y: 510 },
+      order: { x: 388, y: 452 },
+      chaosTitle: 'Correos sin Responder',
+      orderTitle: 'Agente IA Conectado',
+      desc: isSynchronized ? 'Respuestas automáticas con stock real de bodega' : 'Horas de espera para cotizar clientes',
+    },
+    {
+      id: 2,
+      chaos: { x: 120, y: 520 },
+      order: { x: 212, y: 452 },
+      chaosTitle: 'Descuadre de Stock',
+      orderTitle: 'Hardware de Terreno',
+      desc: isSynchronized ? 'Sensores y terminales POS en línea con respaldo' : 'Pérdidas y conteos físicos desfasados',
+    },
+    {
+      id: 3,
+      chaos: { x: 70, y: 280 },
+      order: { x: 125, y: 300 },
+      chaosTitle: 'ERP Desactualizado',
+      orderTitle: 'Conexión Nativa ERP',
+      desc: isSynchronized ? 'Integración limpia a SAP, Softland o Defontana' : 'Silos de información no reconciliados',
+    },
+    {
+      id: 4,
+      chaos: { x: 150, y: 80 },
+      order: { x: 212, y: 148 },
+      chaosTitle: 'Validaciones Lentas',
+      orderTitle: 'Reglas de Negocio',
+      desc: isSynchronized ? 'Validaciones automáticas y cero fricción' : 'Burocracia que frena la venta',
+    },
+    {
+      id: 5,
+      chaos: { x: 440, y: 60 },
+      order: { x: 388, y: 148 },
+      chaosTitle: 'Sobrecarga de Equipo',
+      orderTitle: 'Equipo Liberado',
+      desc: isSynchronized ? 'Colaboradores enfocados en tareas estratégicas' : 'Horas extras apagando incendios operativos',
+    },
+  ];
+
+  const interpolatedNodes = nodes.map((node) => ({
+    ...node,
+    x: node.chaos.x + (node.order.x - node.chaos.x) * effectiveProgress,
+    y: node.chaos.y + (node.order.y - node.chaos.y) * effectiveProgress,
+  }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -65,146 +139,297 @@ export default function AiSmartView() {
       </header>
 
       {/* ═══════════════════════════════════════════════════════════════
-          IMMERSIVE HERO — Neural Network + Floating Particle Field
+          IMMERSIVE PINNED HERO & SCROLL-DRIVEN CONVERGENCE ENGINE
          ═══════════════════════════════════════════════════════════════ */}
-      <section className="ai-hero-section" id="inicio">
+      <div className="ai-hero-scroll-track" ref={heroTrackRef}>
+        <section className="ai-hero-sticky-stage" id="inicio">
         {/* Animated background layers */}
         <div className="ai-hero-bg-layer">
-          <div className="ai-hero-glow"></div>
+          <div className="ai-hero-glow glow-primary"></div>
           <div className="ai-hero-glow glow-secondary"></div>
+          <div className="ai-hero-glow glow-accent"></div>
 
           {/* Floating particles */}
-          {[...Array(20)].map((_, i) => (
+          {[...Array(24)].map((_, i) => (
             <div
               key={i}
               className="ai-particle"
               style={{
-                left: `${5 + Math.random() * 90}%`,
-                top: `${5 + Math.random() * 90}%`,
-                animationDelay: `${Math.random() * 6}s`,
-                animationDuration: `${4 + Math.random() * 6}s`,
-                width: `${2 + Math.random() * 4}px`,
-                height: `${2 + Math.random() * 4}px`,
+                left: `${4 + ((i * 17) % 92)}%`,
+                top: `${6 + ((i * 23) % 86)}%`,
+                animationDelay: `${(i * 0.3) % 5}s`,
+                animationDuration: `${5 + (i % 4)}s`,
+                width: `${2 + (i % 3)}px`,
+                height: `${2 + (i % 3)}px`,
               }}
             />
           ))}
         </div>
 
-        {/* Central SVG Neural Visualization */}
-        <div className="ai-hero-visual">
-          <svg className="neural-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.6" />
-                <stop offset="70%" stopColor="#0284c7" stopOpacity="0.1" />
-                <stop offset="100%" stopColor="transparent" stopOpacity="0" />
-              </radialGradient>
-              <filter id="softGlow">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
-            </defs>
+        <div className="ai-hero-container">
+          <div className="ai-hero-split">
+            {/* Left Column: Hero copy & CTAs */}
+            <div className="ai-hero-content">
+              <div className="ai-hero-badge">
+                <Sparkles size={14} className="badge-sparkle-icon" />
+                <span>Automatización con IA &amp; Conectividad de Hardware</span>
+              </div>
 
-            {/* Orbiting rings */}
-            <circle className="orbit-ring ring-1" cx="300" cy="300" r="130" />
-            <circle className="orbit-ring ring-2" cx="300" cy="300" r="200" />
-            <circle className="orbit-ring ring-3" cx="300" cy="300" r="265" />
+              <h1 className="ai-hero-title">
+                <span className="gradient-text">Entregamos tiempo.</span>
+                <br />
+                Su empresa opera. Nosotros resolvemos.
+              </h1>
 
-            {/* Neural connections */}
-            <line className="neural-link link-1" x1="300" y1="300" x2="430" y2="240" />
-            <line className="neural-link link-2" x1="300" y1="300" x2="170" y2="230" />
-            <line className="neural-link link-3" x1="300" y1="300" x2="210" y2="430" />
-            <line className="neural-link link-4" x1="300" y1="300" x2="420" y2="400" />
-            <line className="neural-link link-5" x1="300" y1="300" x2="300" y2="140" />
-            <line className="neural-link link-6" x1="300" y1="300" x2="140" y2="340" />
-            <line className="neural-link link-7" x1="300" y1="300" x2="460" y2="330" />
+              <p className="ai-hero-subtitle">
+                Asistentes de IA conectados a sus bases de datos y dispositivos de terreno en tiempo real.
+                <strong> Servicio 100% llave en mano de inicio a fin.</strong>
+              </p>
 
-            {/* Outer connections */}
-            <line className="neural-link-secondary" x1="430" y1="240" x2="500" y2="170" />
-            <line className="neural-link-secondary" x1="170" y1="230" x2="100" y2="160" />
-            <line className="neural-link-secondary" x1="210" y1="430" x2="140" y2="490" />
-            <line className="neural-link-secondary" x1="420" y1="400" x2="500" y2="450" />
-            <line className="neural-link-secondary" x1="300" y1="140" x2="340" y2="60" />
-            <line className="neural-link-secondary" x1="140" y1="340" x2="65" y2="370" />
-            <line className="neural-link-secondary" x1="460" y1="330" x2="540" y2="310" />
+              <div className="ai-hero-actions">
+                <a href="#demos" className="primary-pill-btn">
+                  <Sparkles size={18} />
+                  <span>Explorar Demos en Vivo</span>
+                </a>
+                <a href="#contacto" className="secondary-pill-btn">
+                  <span>Solicitar Diagnóstico</span>
+                  <ArrowRight size={16} />
+                </a>
+              </div>
 
-            {/* Core glow */}
-            <circle cx="300" cy="300" r="60" fill="url(#coreGlow)" className="core-pulse" />
+              {/* Impact metrics glass cards */}
+              <div className="ai-hero-metrics">
+                <div className="metric-glass">
+                  <span className="metric-val">&minus;70%</span>
+                  <span className="metric-lbl">Carga operativa rutinaria</span>
+                </div>
+                <div className="metric-glass">
+                  <span className="metric-val">24/7</span>
+                  <span className="metric-lbl">Gestión autónoma continua</span>
+                </div>
+                <div className="metric-glass">
+                  <span className="metric-val">0</span>
+                  <span className="metric-lbl">Fricción de adopción</span>
+                </div>
+              </div>
+            </div>
 
-            {/* Central node */}
-            <circle className="neural-node core-node" cx="300" cy="300" r="14" filter="url(#softGlow)" />
+            {/* Right Column: 3D Holographic Convergence Engine */}
+            <div
+              className="ai-hero-visual"
+              {...mouseHandlers}
+              style={{
+                transform: `perspective(900px) rotateX(${mousePos.y * -8}deg) rotateY(${mousePos.x * 10}deg)`,
+              }}
+            >
+              {/* Convergence Ambient Status Pill (Driven purely by scroll) */}
+              <div className="convergence-status-pill">
+                <div className="controller-meta">
+                  <span className={`status-indicator-dot ${isSynchronized ? 'green' : 'amber'}`}></span>
+                  <span className="controller-status-text">
+                    {isSynchronized
+                      ? 'SINERGIA OPERATIVA: 100% INTEGRADO'
+                      : 'ESTADO INICIAL: SILOS Y FRICCIÓN MANUAL'}
+                  </span>
+                </div>
+                <div className="scroll-progress-indicator">
+                  <div className="scroll-progress-bar">
+                    <div
+                      className="scroll-progress-fill"
+                      style={{ width: `${Math.min(100, effectiveProgress * 100)}%` }}
+                    ></div>
+                  </div>
+                  <span className="scroll-assist-hint">
+                    {effectiveProgress < 0.95 ? '⇣ Scrollee para conectar la solución' : '✔ Estructura Sincronizada'}
+                  </span>
+                </div>
+              </div>
 
-            {/* Primary nodes */}
-            <circle className="neural-node node-primary n1" cx="430" cy="240" r="8" filter="url(#softGlow)" />
-            <circle className="neural-node node-primary n2" cx="170" cy="230" r="8" filter="url(#softGlow)" />
-            <circle className="neural-node node-primary n3" cx="210" cy="430" r="8" filter="url(#softGlow)" />
-            <circle className="neural-node node-primary n4" cx="420" cy="400" r="8" filter="url(#softGlow)" />
-            <circle className="neural-node node-primary n5" cx="300" cy="140" r="8" filter="url(#softGlow)" />
-            <circle className="neural-node node-primary n6" cx="140" cy="340" r="8" filter="url(#softGlow)" />
-            <circle className="neural-node node-primary n7" cx="460" cy="330" r="8" filter="url(#softGlow)" />
+              {/* Central SVG Interactive Canvas */}
+              <svg className="neural-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <radialGradient id="aiCoreGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#00f0ff" stopOpacity={0.4 + effectiveProgress * 0.5} />
+                    <stop offset="60%" stopColor="#0284c7" stopOpacity={0.15 + effectiveProgress * 0.25} />
+                    <stop offset="100%" stopColor="transparent" stopOpacity="0" />
+                  </radialGradient>
+                  <filter id="softGlow">
+                    <feGaussianBlur stdDeviation="3.5" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                  <linearGradient id="laserBeamGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#818cf8" stopOpacity="0.4" />
+                  </linearGradient>
+                </defs>
 
-            {/* Secondary nodes */}
-            <circle className="neural-node node-secondary" cx="500" cy="170" r="5" />
-            <circle className="neural-node node-secondary" cx="100" cy="160" r="5" />
-            <circle className="neural-node node-secondary" cx="140" cy="490" r="5" />
-            <circle className="neural-node node-secondary" cx="500" cy="450" r="5" />
-            <circle className="neural-node node-secondary" cx="340" cy="60" r="5" />
-            <circle className="neural-node node-secondary" cx="65" cy="370" r="5" />
-            <circle className="neural-node node-secondary" cx="540" cy="310" r="5" />
+                {/* Concentric orbital rings — expand and clarify as progress increases */}
+                <circle
+                  className="orbit-ring ring-1"
+                  cx="300"
+                  cy="300"
+                  r={120 + effectiveProgress * 20}
+                  style={{ opacity: 0.2 + effectiveProgress * 0.6 }}
+                />
+                <circle
+                  className="orbit-ring ring-2"
+                  cx="300"
+                  cy="300"
+                  r={180 + effectiveProgress * 25}
+                  style={{ opacity: 0.15 + effectiveProgress * 0.5 }}
+                />
+                <circle
+                  className="orbit-ring ring-3"
+                  cx="300"
+                  cy="300"
+                  r={250 + effectiveProgress * 20}
+                  style={{ opacity: 0.1 + effectiveProgress * 0.4 }}
+                />
 
-            {/* Orbiting dots */}
-            <circle className="orbit-dot od-1" cx="0" cy="0" r="4" />
-            <circle className="orbit-dot od-2" cx="0" cy="0" r="3.5" />
-            <circle className="orbit-dot od-3" cx="0" cy="0" r="3" />
-          </svg>
-        </div>
+                {/* Hexagonal perimeter shield connections (appear when order is reached) */}
+                {interpolatedNodes.map((n, idx) => {
+                  const nextNode = interpolatedNodes[(idx + 1) % interpolatedNodes.length];
+                  return (
+                    <line
+                      key={`perimeter-${idx}`}
+                      x1={n.x}
+                      y1={n.y}
+                      x2={nextNode.x}
+                      y2={nextNode.y}
+                      stroke="#00f0ff"
+                      strokeWidth={1.5}
+                      strokeOpacity={Math.max(0, (effectiveProgress - 0.35) * 1.5)}
+                      strokeDasharray={effectiveProgress > 0.8 ? 'none' : '4 6'}
+                    />
+                  );
+                })}
 
-        {/* Hero copy — minimal, bold, Apple-like */}
-        <div className="ai-hero-content">
-          <h1 className="ai-hero-title">
-            <span className="gradient-text">Entregamos tiempo.</span>
-            <br />
-            Su empresa opera. Nosotros resolvemos.
-          </h1>
+                {/* Radial Synapse Beams from Center (300, 300) to each dynamic node */}
+                {interpolatedNodes.map((n) => {
+                  const isAmber = effectiveProgress < 0.5;
+                  return (
+                    <g key={`beam-${n.id}`}>
+                      <line
+                        x1="300"
+                        y1="300"
+                        x2={n.x}
+                        y2={n.y}
+                        stroke={isAmber ? '#f59e0b' : 'url(#laserBeamGrad)'}
+                        strokeWidth={isAmber ? 1.2 : 2.2}
+                        strokeOpacity={isAmber ? 0.25 : 0.4 + effectiveProgress * 0.5}
+                        strokeDasharray={isAmber ? '6 6' : 'none'}
+                        className={!isAmber ? 'active-laser-beam' : ''}
+                      />
+                      {/* Energy pulse travelling along the beam when synced */}
+                      {effectiveProgress > 0.6 && (
+                        <circle
+                          cx={300 + (n.x - 300) * ((0.3 + effectiveProgress * 0.5) % 1)}
+                          cy={300 + (n.y - 300) * ((0.3 + effectiveProgress * 0.5) % 1)}
+                          r={3.5}
+                          fill="#00f0ff"
+                          filter="url(#softGlow)"
+                        />
+                      )}
+                    </g>
+                  );
+                })}
 
-          <p className="ai-hero-subtitle">
-            IA, automatización y hardware integrado.
-            <strong> Servicio 100% resuelto de inicio a fin.</strong>
-          </p>
+                {/* Central LSOFT Core (Grows radiant and magnetic with progress) */}
+                <circle
+                  cx="300"
+                  cy="300"
+                  r={50 + effectiveProgress * 35}
+                  fill="url(#aiCoreGlow)"
+                  className="core-pulse"
+                />
+                <circle
+                  className="neural-node core-node"
+                  cx="300"
+                  cy="300"
+                  r={14 + effectiveProgress * 4}
+                  filter="url(#softGlow)"
+                  fill={isSynchronized ? '#00f0ff' : '#0284c7'}
+                />
 
-          <div className="ai-hero-actions">
-            <a href="#demos" className="primary-pill-btn">
-              <Sparkles size={18} />
-              <span>Explorar Demos en Vivo</span>
-            </a>
-            <a href="#contacto" className="secondary-pill-btn">
-              <span>Solicitar Diagnóstico</span>
-              <ArrowRight size={16} />
-            </a>
-          </div>
-        </div>
+                {/* Operational Nodes with dynamic positions & labels */}
+                {interpolatedNodes.map((n) => {
+                  const isHoveredNode = activeNodeHover === n.id;
+                  const nodeColor = isSynchronized ? '#00f0ff' : '#f59e0b';
+                  const labelText = isSynchronized ? n.orderTitle : n.chaosTitle;
 
-        {/* Floating impact metrics */}
-        <div className="ai-hero-metrics">
-          <div className="metric-glass">
-            <span className="metric-val">&minus;70%</span>
-            <span className="metric-lbl">Carga operativa</span>
-          </div>
-          <div className="metric-glass">
-            <span className="metric-val">24/7</span>
-            <span className="metric-lbl">Gestión autónoma</span>
-          </div>
-          <div className="metric-glass">
-            <span className="metric-val">0</span>
-            <span className="metric-lbl">Fricción técnica</span>
+                  return (
+                    <g
+                      key={`node-${n.id}`}
+                      onMouseEnter={() => setActiveNodeHover(n.id)}
+                      onMouseLeave={() => setActiveNodeHover(null)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {/* Outer target ring */}
+                      <circle
+                        cx={n.x}
+                        cy={n.y}
+                        r={isHoveredNode ? 14 : 9}
+                        fill="none"
+                        stroke={nodeColor}
+                        strokeWidth={1.5}
+                        strokeOpacity={isHoveredNode ? 0.9 : 0.4}
+                      />
+                      {/* Node core dot */}
+                      <circle
+                        cx={n.x}
+                        cy={n.y}
+                        r={isHoveredNode ? 7 : 5}
+                        fill={nodeColor}
+                        filter="url(#softGlow)"
+                      />
+
+                      {/* Interactive text badge next to node */}
+                      <rect
+                        x={n.x > 300 ? n.x + 12 : n.x - 130}
+                        y={n.y - 12}
+                        width={120}
+                        height={24}
+                        rx={6}
+                        fill={isSynchronized ? 'rgba(5, 14, 30, 0.88)' : 'rgba(25, 18, 5, 0.88)'}
+                        stroke={nodeColor}
+                        strokeWidth={1}
+                        strokeOpacity={isHoveredNode ? 0.9 : 0.45}
+                      />
+                      <text
+                        x={n.x > 300 ? n.x + 18 : n.x - 124}
+                        y={n.y + 4}
+                        fill={isSynchronized ? '#e2e8f0' : '#fed7aa'}
+                        fontSize={9.5}
+                        fontWeight={700}
+                        fontFamily="sans-serif"
+                      >
+                        {labelText}
+                      </text>
+                    </g>
+                  );
+                })}
+              </svg>
+
+              {/* Tooltip on node hover */}
+              {activeNodeHover !== null && (
+                <div className="node-detail-tooltip">
+                  <strong>{isSynchronized ? nodes[activeNodeHover].orderTitle : nodes[activeNodeHover].chaosTitle}</strong>
+                  <p>{nodes[activeNodeHover].desc}</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Scroll indicator */}
         <div className="scroll-indicator">
+          <span className="scroll-text">
+            {effectiveProgress < 0.95 ? 'Baje con el scroll para sincronizar la estructura' : 'Explore las capacidades en acción'}
+          </span>
           <div className="scroll-line"></div>
         </div>
       </section>
+    </div>
 
       {/* Demos Sandbox Zone */}
       <section className="ai-demos-section" id="demos">
