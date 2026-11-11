@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sparkles, DollarSign, Terminal, History, ChevronRight } from 'lucide-react';
+import { Sparkles, DollarSign, Terminal, History, ChevronRight, Users } from 'lucide-react';
 
 export const VARIANTS = [
   {
@@ -34,6 +34,14 @@ export const VARIANTS = [
     icon: Terminal,
     color: '#8b5cf6',
   },
+  {
+    id: 'teams',
+    name: 'V4: Equipos Multidisciplinarios & TI',
+    tag: 'Nueva Imagen',
+    desc: 'Células especializadas, opciones de contratación, Cloud, CI/CD, Legacy y Ciberseguridad',
+    icon: Users,
+    color: '#2563eb',
+  },
 ];
 
 export default function VariantSwitcher({ currentVariant, onSelectVariant }) {
@@ -61,7 +69,7 @@ export default function VariantSwitcher({ currentVariant, onSelectVariant }) {
             <div className="variant-dropdown-header">
               <div>
                 <h3>Selector de Variantes de Modernización</h3>
-                <p>Compara el sitio original contra las 3 propuestas estratégicas de valor</p>
+                <p>Compare el sitio original contra las propuestas estratégicas de valor e imagen</p>
               </div>
               <button className="close-btn" onClick={() => setIsOpen(false)}>✕</button>
             </div>

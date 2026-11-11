@@ -4,11 +4,13 @@ import OriginalView from './components/variants/original/OriginalView';
 import AiSmartView from './components/variants/ai_smart/AiSmartView';
 import MinimalRoiView from './components/variants/minimal_roi/MinimalRoiView';
 import DeepTechView from './components/variants/deep_tech/DeepTechView';
+import TeamsView from './components/variants/teams/TeamsView';
 
 import './styles/switcher.css';
 import './styles/variant-ai.css';
 import './styles/variant-minimal.css';
 import './styles/variant-deeptech.css';
+import './styles/variant-teams.css';
 
 function getVariantFromUrl() {
   if (typeof window === 'undefined') return 'original';
@@ -56,6 +58,7 @@ function App() {
       {currentVariant === 'ai-smart' && <AiSmartView />}
       {currentVariant === 'minimal-roi' && <MinimalRoiView />}
       {currentVariant === 'deep-tech' && <DeepTechView />}
+      {currentVariant === 'teams' && <TeamsView />}
     </div>
   );
 }
